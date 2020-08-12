@@ -8,7 +8,7 @@ from configparser import ConfigParser
 
 @dataclass
 class Config:
-    
+
     config_path: str
 
     # Basic
@@ -31,29 +31,53 @@ class Config:
 
 
 def get_config_path():
+    """return config directory location
+
+    Importance given to XDG values, if that exists we use that
+    else we choose $HOME/.config
+
+    Return:
+    config_path (str): configuration directory location
+    """
     if os.environ.get("XDG_CONFIG_HOME"):
-        return os.path.join(os.environ["XDG_CONFIG_HOME"], "homekeep.ini")
-    return os.path.join(os.environ["HOME"], ".config", "homekeep.ini")
+        config_path = os.path.join(os.environ["XDG_CONFIG_HOME"], "homekeep.ini")
+    config_path = os.path.join(os.environ["HOME"], ".config", "homekeep.ini")
+
+    return config_path
 
 
 def get_config(config_path):
+    """ Get Config Parser Object
+
+    Args:
+        config_path (str): configuration directory location
+
+    Return:
+        ConfigParser object with config values
+
+    """
     config = ConfigParser()
 
     if not os.path.isfile(config_path):
-        # Basic
-        config.add_section("Basic")
-        config["Basic"]["Move"] = "False"
+        create_default_config(config, config_path)
 
-        # Paths
-        config.add_section("Paths")
-        config["Paths"]["MoviesDirectory"] = os.path.join(os.environ["HOME"], "Movies")
-        config["Paths"]["TvShowsDirectory"] = os.path.join(os.environ["HOME"], "TV Shows")
-        config["Paths"]["MusicDirectory"] = os.path.join(os.environ["HOME"], "Music")
+    config.read(config_path)
 
-        with open(config_path, "w") as file:
-            config.write(file)
-        
-    else:
-        config.read(config_path)
-        
     return config
+
+
+def create_default_config(config, config_path):
+    """ Default Values for configuration file """
+
+    # Basic
+    config.add_section("Basic")
+    config["Basic"]["Move"] = "False"
+
+    # Paths
+    config.add_section("Paths")
+    config["Paths"]["MoviesDirectory"] = os.path.join(os.environ["HOME"], "Movies")
+    config["Paths"]["TvShowsDirectory"] = os.path.join(os.environ["HOME"], "TV Shows")
+    config["Paths"]["MusicDirectory"] = os.path.join(os.environ["HOME"], "Music")
+
+    with open(config_path, "w") as file:
+        config.write(file)
