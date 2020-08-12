@@ -1,0 +1,1 @@
+""" Enrty point for the script """

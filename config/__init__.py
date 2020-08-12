@@ -1,0 +1,1 @@
+""" module for managing configurations """
