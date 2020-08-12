@@ -1,1 +1,1 @@
-""" Enrty point for the script """
+""" Entry point for the script """
