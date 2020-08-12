@@ -39,21 +39,21 @@ def get_config_path():
 def get_config(config_path):
     config = ConfigParser()
 
-    if os.path.isfile(config_path):
+    if not os.path.isfile(config_path):
+        # Basic
+        config.add_section("Basic")
+        config["Basic"]["Move"] = "False"
+
+        # Paths
+        config.add_section("Paths")
+        config["Paths"]["MoviesDirectory"] = os.path.join(os.environ["HOME"], "Movies")
+        config["Paths"]["TvShowsDirectory"] = os.path.join(os.environ["HOME"], "TV Shows")
+        config["Paths"]["MusicDirectory"] = os.path.join(os.environ["HOME"], "Music")
+
+        with open(config_path, "w") as file:
+            config.write(file)
+        
+    else:
         config.read(config_path)
-        return config
-
-    # Basic
-    config.add_section("Basic")
-    config["Basic"]["Move"] = "False"
-
-    # Paths
-    config.add_section("Paths")
-    config["Paths"]["MoviesDirectory"] = os.path.join(os.environ["HOME"], "Movies")
-    config["Paths"]["TvShowsDirectory"] = os.path.join(os.environ["HOME"], "TV Shows")
-    config["Paths"]["MusicDirectory"] = os.path.join(os.environ["HOME"], "Music")
-
-    with open(config_path, "w") as file:
-        config.write(file)
         
     return config
