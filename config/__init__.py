@@ -41,7 +41,8 @@ def get_config_path():
     """
     if os.environ.get("XDG_CONFIG_HOME"):
         config_path = os.path.join(os.environ["XDG_CONFIG_HOME"], "homekeep.ini")
-    config_path = os.path.join(os.environ["HOME"], ".config", "homekeep.ini")
+    else:
+        config_path = os.path.join(os.environ["HOME"], ".config", "homekeep.ini")
 
     return config_path
 
