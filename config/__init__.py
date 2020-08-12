@@ -75,9 +75,9 @@ def create_default_config(config, config_path):
 
     # Paths
     config.add_section("Paths")
-    config["Paths"]["MoviesDirectory"] = os.path.join(os.environ["HOME"], "Movies")
-    config["Paths"]["TvShowsDirectory"] = os.path.join(os.environ["HOME"], "TV Shows")
-    config["Paths"]["MusicDirectory"] = os.path.join(os.environ["HOME"], "Music")
+    config["Paths"]["MoviesDirectory"] = os.path.join(os.environ["HOME"], 'Videos', 'Movies')
+    config["Paths"]["TvShowsDirectory"] = os.path.join(os.environ["HOME"], 'Videos', 'TV Shows')
+    config["Paths"]["MusicDirectory"] = os.path.join(os.environ["HOME"], 'Music')
 
     with open(config_path, "w") as file:
         config.write(file)
