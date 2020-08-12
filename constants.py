@@ -1,34 +1,35 @@
 VIDEO_TYPES = {
-    'mpeg',
-    'webm',
-    'mpg',
-    'mp2',
-    'mpe',
-    'mpv',
-    'ogg',
-    'mp4',
-    'm4v',
+    "mpeg",
+    "webm",
+    "mpg",
+    "mp2",
+    "mpe",
+    "mpv",
+    "ogg",
+    "mp4",
+    "m4v",
+    "mkv"
 }
 
 MUSIC_TYPES = {
-    'flac',
-    'mp3',
-    'mpa',
-    'aac',
-    'oga',
-    'ape',
-    'm4a',
-    'm4p',
-    'wav'
+    "flac",
+    "mp3",
+    "mpa",
+    "aac",
+    "oga",
+    "ape",
+    "m4a",
+    "m4p",
+    "wav"
 }
 
 PICTURE_TYPES = {
-    'jpeg',
-    'jfif',
-    'exif',
-    'gif',
-    'bmp',
-    'png',
+    "jpeg",
+    "jfif",
+    "exif",
+    "gif",
+    "bmp",
+    "png",
 }
 
 # not sure if wanna add support for documents
