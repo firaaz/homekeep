@@ -1,4 +1,7 @@
-""" module for managing configurations """
+""" module for managing configurations
+
+Priority to XDG values, if found they are used.
+"""
 
 import os
 from ast import literal_eval
@@ -48,7 +51,7 @@ def get_config_path():
 
 
 def get_config(config_path):
-    """ Get Config Parser Object
+    """ Get ConfigParser Object
 
     Args:
         config_path (str): configuration directory location
@@ -60,14 +63,14 @@ def get_config(config_path):
     config = ConfigParser()
 
     if not os.path.isfile(config_path):
-        create_default_config(config, config_path)
+        _create_default_config(config, config_path)
 
     config.read(config_path)
 
     return config
 
 
-def create_default_config(config, config_path):
+def _create_default_config(config, config_path):
     """ Default Values for configuration file """
 
     # Basic

@@ -4,7 +4,8 @@ from argparse import ArgumentParser
 
 from config import Config
 
-if __name__ == '__main__':
+
+def main():
     parser = ArgumentParser("Organize files in a directory.")
     parser.add_argument("directory", metavar="dir", type=str,
                         help="Directory to organize")
@@ -14,3 +15,7 @@ if __name__ == '__main__':
     if args.directory:
         target_dir = args.directory
         print(target_dir)
+
+
+if __name__ == '__main__':
+    main()
