@@ -14,7 +14,7 @@ def main():
     parser.add_argument("directory", metavar="dir", type=str,
                         help="Directory to organize")
     args = parser.parse_args()
-    config = Config()
+    config = Config.fromFile()
     handler = Handler()
 
     if args.directory:

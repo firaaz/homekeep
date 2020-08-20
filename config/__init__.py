@@ -9,79 +9,106 @@ from dataclasses import dataclass
 from configparser import ConfigParser
 
 
+# NOTE: When adding new fields even add those to the _create_default
+# and get_config_data functions
 @dataclass
 class Config:
+    """ Config data """
 
+    # meta configs
     config_path: str
 
     # Basic
     move: bool
 
     # Paths
-    movie_directory = str
-    tv_show_directory = str
-    music_directory = str
+    movie_directory: str
+    tv_directory: str
+    music_directory: str
 
-    def __init__(self):
-        self.config_path = get_config_path()
-        config = get_config(self.config_path)
+    @classmethod
+    def fromFile(cls):
+        """ Create the Config object from the configuration file
+        """
 
-        self.move = literal_eval(config["Basic"]["Move"])
+        config_path = Config.get_config_path()
+        config_data = Config.get_config(config_path)
 
-        self.movie_directory = config["Paths"]["MoviesDirectory"]
-        self.tv_show_directory = config["Paths"]["TvShowsDirectory"]
-        self.music_directory = config["Paths"]["MusicDirectory"]
+        return cls(**config_data)
 
+    @staticmethod
+    def get_config_path():
+        """return config directory location
 
-def get_config_path():
-    """return config directory location
+        Importance given to XDG values, if that exists we use that
+        else we choose $HOME/.config
 
-    Importance given to XDG values, if that exists we use that
-    else we choose $HOME/.config
+        Return:
+            config_path (str): configuration directory location
+        """
+        if os.environ.get("XDG_CONFIG_HOME"):
+            config_path = os.path.join(os.environ["XDG_CONFIG_HOME"], "homekeep.ini")
+        else:
+            config_path = os.path.join(os.environ["HOME"], ".config", "homekeep.ini")
 
-    Return:
-    config_path (str): configuration directory location
-    """
-    if os.environ.get("XDG_CONFIG_HOME"):
-        config_path = os.path.join(os.environ["XDG_CONFIG_HOME"], "homekeep.ini")
-    else:
-        config_path = os.path.join(os.environ["HOME"], ".config", "homekeep.ini")
+        return config_path
 
-    return config_path
+    @staticmethod
+    def get_config_data(config, config_path):
+        """ config data extraction
 
+        Args:
+            config (ConfigParser): object that has the config file
 
-def get_config(config_path):
-    """ Get ConfigParser Object
+        Result:
+            dict of the config values
+        """
 
-    Args:
-        config_path (str): configuration directory location
+        config_data = {
+            'config_path': config_path,
+            'move': literal_eval(config['basic']['move']),
+            'movie_directory': config['paths']['movie_directory'],
+            'tv_directory': config['paths']['tv_directory'],
+            'music_directory': config['paths']['music_directory']
+        }
 
-    Return:
-        ConfigParser object with config values
+        return config_data
 
-    """
-    config = ConfigParser()
+    @staticmethod
+    def get_config(config_path):
+        """ Get ConfigParser Object
 
-    if not os.path.isfile(config_path):
-        _create_default_config(config, config_path)
+        Args:
+            config_path (str): configuration directory location
 
-    config.read(config_path)
+        Return:
+            ConfigParser object with config values
 
-    return config
+        """
+        config = ConfigParser()
 
+        # if file does not exist, create it before reading
+        if not os.path.isfile(config_path):
+            Config._create_default(config, config_path)
 
-def _create_default_config(config, config_path):
-    """ Default Values for configuration file """
+        config.read(config_path)
+        config_data = Config.get_config_data(config, config_path)
 
-    # Basic
-    config.add_section("Basic")
-    config["Basic"]["Move"] = "False"
+        return config_data
 
-    # Paths
-    config.add_section("Paths")
-    config["Paths"]["MoviesDirectory"] = os.path.join(os.environ["HOME"], "Videos", "Movies")
-    config["Paths"]["TvShowsDirectory"] = os.path.join(os.environ["HOME"], "Videos", "TV Shows")
-    config["Paths"]["MusicDirectory"] = os.path.join(os.environ["HOME"], "Music")
+    @staticmethod
+    def _create_default(config, config_path):
+        """ Default Values for configuration file """
 
-    with open(config_path, "w") as file:
-        config.write(file)
+        # Basic
+        config.add_section("basic")
+        config["basic"]["move"] = "False"
+
+        # Paths
+        config.add_section("paths")
+        config["paths"]["movie_directory"] = os.path.join(os.environ["HOME"], "Videos", "Movies")
+        config["paths"]["tv_directory"] = os.path.join(os.environ["HOME"], "Videos", "TV Shows")
+        config["paths"]["music_directory"] = os.path.join(os.environ["HOME"], "Music")
+
+        with open(config_path, "w") as file:
+            config.write(file)
