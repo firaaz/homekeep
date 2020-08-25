@@ -15,7 +15,7 @@ from configparser import ConfigParser
 class Config:
     """ Config data """
 
-    # meta configs
+    # meta attr
     config_path: str
 
     # Basic
@@ -25,9 +25,10 @@ class Config:
     movie_directory: str
     tv_directory: str
     music_directory: str
+    pictures_directory: str
 
     @classmethod
-    def fromFile(cls):
+    def from_file(cls):
         """ Create the Config object from the configuration file
         """
 
@@ -69,7 +70,8 @@ class Config:
             'move': literal_eval(config['basic']['move']),
             'movie_directory': config['paths']['movie_directory'],
             'tv_directory': config['paths']['tv_directory'],
-            'music_directory': config['paths']['music_directory']
+            'music_directory': config['paths']['music_directory'],
+            'pictures_directory': config['paths']['pictures_directory']
         }
 
         return config_data
@@ -109,6 +111,7 @@ class Config:
         config["paths"]["movie_directory"] = os.path.join(os.environ["HOME"], "Videos", "Movies")
         config["paths"]["tv_directory"] = os.path.join(os.environ["HOME"], "Videos", "TV Shows")
         config["paths"]["music_directory"] = os.path.join(os.environ["HOME"], "Music")
+        config["paths"]["pictures_directory"] = os.path.join(os.environ["HOME"], "Pictures")
 
         with open(config_path, "w") as file:
             config.write(file)
