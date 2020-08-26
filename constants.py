@@ -1,7 +1,7 @@
 """ Constants defintions"""
 
-TYPES = {
-    'audio': 'Music',
-    'video': 'Videos',
-    'image': 'Pictures'
+FOLDERS = {
+    'audio': 'music_directory',
+    'video': 'videos',
+    'image': 'pictures_directory'
 }
